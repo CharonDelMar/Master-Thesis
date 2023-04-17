@@ -1,4 +1,5 @@
-%Initialize the parameters
+%Initialize the parameters -- change to two terms diff(x,t,t) =
+%-w_{0}max(x) max --> t=0 what I need is to find the min
 T = 10 * pi ;
 
 ampl1 = 1;
@@ -12,16 +13,16 @@ freq = (0:0.25:1) * natural_freq;%Omega
 
 %construct the system
 %%system G(x(t))
-syms x(t) omega x1 x2 x3 Omega
+syms x(t) zeta omega x1 x2 x3 Omega
 %x(t) = x1 * sin(Omega * t) + x2 * sin(2 * Omega * t) + x3 * sin(3 * Omega * t);
 x(t) = x1 * cos(Omega * t) + x2 * cos(2 * Omega * t) + x3 * cos(3 * Omega * t);
-G = diff(x,t,t) + omega^2 * x;
+G = diff(x,t,t) + 2 * zeta * omega * diff(x);
 
 %%system -Fs(x(t))
 syms x(t) zeta omega Omega
 %x(t) = x1 * sin(Omega * t) + x2 * sin(2 * Omega * t) + x3 * sin(3 * Omega * t);
 x(t) = x1 * cos(Omega * t) + x2 * cos(2 * Omega * t) + x3 * cos(3 * Omega * t);
-Fs = -2 * zeta * omega * diff(x);
+Fs = - omega^2 * x;
 
 x(t,x1,x2,x3,Omega) = x;
 G(t,zeta,omega,x1,x2,x3,Omega) = G;
