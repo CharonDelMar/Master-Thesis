@@ -7,8 +7,9 @@
 % switch out from random parameter input (zeta = 0.4, omega_0 = 1, omega =
 % 0.9 (lambda = 0.9)
 
-clc;
+%%for even coefficient: add a constant coefficient k maybe work
 clear all;
+clc;
 
 %Objective Function is p = f * Dx
 
@@ -16,50 +17,76 @@ clear all;
 %p = f .* DX;
 
 %Initialization
-m = 2; % m terms Case
+m = 6; % m terms Case
 zeta = 0.4;
+%for zeta = 0.1 : 0.1 : 1.0
 omega_0 = 1;
-omega = 0.9;
+omega = 0.8;
 
 Period = 2 * pi / omega;
-time_step = 80;
+time_step = 1000;
 t = linspace(0,2 * Period,time_step);
 
 Cnt = cosharm(m,omega,time_step,t);
 Snt = sinharm(m,omega,time_step,t);
 CCnt = ccosharm(m,omega,time_step,t);
 
+digits(9);
+
 %Create Variables
-a = optimvar('a',m,'LowerBound',0,'UpperBound',100); % m-by-1 variable
+a = optimvar('a',m); % m-by-1 variable
 
 %Convert the function into optimization expression
-[min_p,p,f,x] = fcn2optimexpr(@power,zeta,omega_0,a,Cnt,Snt,CCnt);
+[min_p,max_p,p,f,x,minx,maxx,F_minx,G_minx,F_maxx,G_maxx] = fcn2optimexpr(@power,zeta,omega_0,a,Cnt,Snt,CCnt,m,time_step);
 fun = @(p)min(p);
 funexpr = fcn2optimexpr(fun,p,'OutputSize',[1,1]);
-
+funmaxp = @(p)max(p);
+funexprmaxp = fcn2optimexpr(funmaxp,p,'OutputSize',[1,1]);
+funxmin = @(x)min(x);
+funexprxmin = fcn2optimexpr(funxmin,x,'OutputSize',[1,1]);
+funxmax = @(x)max(x);
+funexprxmax = fcn2optimexpr(funxmax,x,'OutputSize',[1,1]);
 
 %Define Objective Functions
 prob = optimproblem;
-prob.Objective = - min_p;
+prob.Objective =  - min_p;
 
 %Define constraints
-prob.Constraints.positive = min_p >= 0;
+%prob.Constraints.positive = min_p >= 0;
+%prob.Constraints.equalityminx = F_minx == G_minx;
+%prob.Constraints.equalitymaxx = F_maxx == G_maxx;
+prob.Constraints.normalisation = maxx-minx == 2;
 
 %Tolerance
-OptimalityTolerance = 1e-9;
+%OptimalityTolerance = 1e-9;
+options = optimoptions(@fmincon,'ConstraintTolerance', 1e-13, 'StepTolerance', 1e-13,'PlotFcn','optimplotfval');
 
 %Solve the problem
-x0.a = [0 0];
+%x0.a = [0.1 0.1 0.1 0.1 0.1 0.1];
+
+x0.a = 0.1*ones(1,m);
 %show(prob);
 [sol,fval,exitflag,output] = solve(prob,x0);
+
+%if fval >= 0.01
+%    x0.a = sol.a;
+%    [sol,fval,exitflag,output] = solve(prob,x0);
+%end
 
 %%Plot
 
 %Data
 %x dx ddx
-x_data = sol.a(1) * Cnt(1,:) + sol.a(2) * Cnt(2,:);
-dx_data = sol.a(1) * Snt(1,:) + sol.a(2) * Snt(2,:);
-ddx_data = sol.a(1) * CCnt(1,:) + sol.a(2) * CCnt(2,:);
+x_data = zeros(1,time_step);
+dx_data = zeros(1,time_step);
+ddx_data = zeros(1,time_step);
+
+for term_index = 1:m
+    x_data = x_data + sol.a(term_index) * Cnt(term_index,:);
+    dx_data = dx_data + sol.a(term_index) * Snt(term_index,:);
+    ddx_data = ddx_data + sol.a(term_index) * CCnt(term_index,:);
+end
+
 %f p
 f_data = ddx_data + 2 * zeta * omega_0 * dx_data + omega_0^2 * x_data;
 p_data = f_data .* dx_data;
@@ -97,7 +124,7 @@ xticklabels({'0','T/4','T\2','3/4T', 'T','5\4T','3\2T','7\4T','2T'});
 ylabel('Power: p','FontName','BIZ UDGothic','FontSize',8,'FontWeight','bold');
 hold on;
 %Mark the minumium
-[pmin_data min_point] = min(p_data);
+[pmin_data, min_point] = min(p_data);
 tmin_data = t(min_point);
 hold on
 style = 'm.'; 
@@ -110,7 +137,7 @@ text(t(min_point),pmin_data + diff(ylim)*offset,['(' num2str(t(min_point)) ',' n
 % Enlarge y axis so that text is properly seen, if offset is negative
 ylim(ylim+[diff(ylim)*offset*(offset<0) 0])
 
-sgtitle(["2-Terms Case Test Waveform ", "Parameters: \xi = 0.4, \omega_0 = 1, \omega = 0.9;","Constraint: p\geq 0"], ...
+sgtitle([m + "-Terms Case Test Waveform ", "Parameters: \xi = " + zeta + ","+ "\omega_0 = " + omega_0 + ", \omega ="+omega + ";"], ...
     'HorizontalAlignmen','left', ...
     'FontName','Times Roman', ...
     'FontWeight','bold', ...
@@ -152,13 +179,39 @@ hold off;
 legend([F_Curve,G_Curve],{'F','G'});
 grid on;
 
-function [min_p,p,f,x] = power(zeta,omega_0,a,Cnt,Snt,CCnt)
-x = a(1) * Cnt(1,:) + a(2) * Cnt(2,:);
-dx = a(1) * Snt(1,:) + a(2) * Snt(2,:);
-ddx = a(1) * CCnt(1,:) + a(2) * CCnt(2,:);
+%output the solutions
+disp(sol.a);
+disp(fval);
+disp(exitflag);
+
+%end
+
+
+function [min_p,max_p,p,f,x,minx,maxx,F_minx,G_minx,F_maxx,G_maxx] = power(zeta,omega_0,a,Cnt,Snt,CCnt,m,time_step)
+x = zeros(1,time_step);
+dx = zeros(1,time_step);
+ddx = zeros(1,time_step);
+
+for aindex = 1:m
+    x = x + a(aindex) * Cnt(aindex,:);
+    dx = dx +a(aindex) * Snt(aindex,:);
+    ddx = ddx + a(aindex) * CCnt(aindex,:);
+end
+
 f = ddx + 2 * zeta * omega_0 * dx + omega_0^2 * x;
 p = f .* dx;
 min_p = min(p);
+max_p = max(p);
+
+
+%added Equality Condition
+[minx, minx_index] = min(x);
+F_minx = -omega_0 ^2 * minx;
+G_minx = ddx(minx_index) + 2 * zeta * omega_0 * dx(minx_index);
+[maxx, maxx_index] = max(x);
+F_maxx = -omega_0 ^2 * maxx;
+G_maxx = ddx(maxx_index) + 2 * zeta * omega_0 * dx(maxx_index);
+
 end
 
 function [Cnt] = cosharm(m,omega,time_step,t)
@@ -167,7 +220,7 @@ function [Cnt] = cosharm(m,omega,time_step,t)
     for index_term = 1:m
         for index_timepoint = 1:time_step
             time = t(index_timepoint);
-            Cnt(index_term,index_timepoint) = cos(index_term * omega * time);
+            Cnt(index_term,index_timepoint) = cos((2*index_term-1) * omega * time);
         end
     end
 end
@@ -178,7 +231,7 @@ function [Snt] = sinharm(m,omega,time_step,t)
     for index_term = 1:m
         for index_timepoint = 1:time_step
             time = t(index_timepoint);
-            Snt(index_term,index_timepoint) = - index_term * omega * sin(index_term * omega * time);
+            Snt(index_term,index_timepoint) = - (2*index_term-1) * omega * sin((2*index_term-1) * omega * time);
         end
     end
 end
@@ -189,11 +242,7 @@ function [CCnt] = ccosharm(m,omega,time_step,t)
     for index_term = 1:m
         for index_timepoint = 1:time_step
             time = t(index_timepoint);
-            CCnt(index_term,index_timepoint) = - index_term^2 * omega^2 * cos(index_term * omega * time);
+            CCnt(index_term,index_timepoint) = - (2*index_term-1)^2 * omega^2 * cos((2*index_term-1) * omega * time);
         end
     end
 end
-
-
-
-

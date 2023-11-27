@@ -20,7 +20,7 @@ m = 2; % m terms Case
 zeta = 0.4;
 %for zeta = 0.1 : 0.1 : 1.0
 omega_0 = 1;
-omega = 0.9;
+omega = 0.8;
 
 Period = 2 * pi / omega;
 time_step = 1000;
@@ -31,7 +31,7 @@ Snt = sinharm(m,omega,time_step,t);
 CCnt = ccosharm(m,omega,time_step,t);
 
 %Create Variables
-a = optimvar('a',m,'LowerBound',0,'UpperBound',100); % m-by-1 variable
+a = optimvar('a',m); % m-by-1 variable
 
 %Convert the function into optimization expression
 [min_p,max_p,p,f,x,minx,maxx,F_minx,G_minx,F_maxx,G_maxx] = fcn2optimexpr(@power,zeta,omega_0,a,Cnt,Snt,CCnt);
@@ -49,17 +49,17 @@ prob = optimproblem;
 prob.Objective =  - min_p;
 
 %Define constraints
-prob.Constraints.positive = min_p >= 0;
-prob.Constraints.equalityminx = F_minx == G_minx;
-prob.Constraints.equalitymaxx = F_maxx == G_maxx;
-prob.Constraints.normalisation = maxx == 1;
+%prob.Constraints.positive = min_p >= 0;
+%prob.Constraints.equalityminx = F_minx == G_minx;
+%prob.Constraints.equalitymaxx = F_maxx == G_maxx;
+prob.Constraints.normalisation = maxx-minx == 2;
 
 %Tolerance
 %OptimalityTolerance = 1e-9;
-options = optimoptions('fmincon','ConstraintTolerance',1e-9);
+options = optimoptions('fmincon','ConstraintTolerance', 1e-13, 'StepTolerance', 1e-13)
 
 %Solve the problem
-x0.a = [0 0];
+x0.a = [1 -0.5];
 %show(prob);
 [sol,fval,exitflag,output] = solve(prob,x0);
 
