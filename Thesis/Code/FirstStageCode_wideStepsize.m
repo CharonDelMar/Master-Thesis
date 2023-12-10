@@ -7,7 +7,7 @@ clc;
 %p = f .* DX;
 
 %Create table to store results
-sz = [10000 5];
+sz = [400 5];
 varTypes = ["double","double","cell","double","string"];
 varNames = ["zeta","omega_ratio","solution","power","test_FLAG"];
 dat = table('Size',sz,'VariableTypes',varTypes,'VariableNames',varNames);
@@ -17,8 +17,8 @@ m = 5; % m terms Case
 
 omega_0 = 1;
 table_index = 1;
-for zeta = 0.01 : 0.01 : 1.0
-    for omega = 0.01 : 0.01 : 1.0
+for zeta = 0.01 : 0.05 : 1.0
+    for omega = 0.01 : 0.05 : 1.0
         
         Period = 2 * pi / omega;
         time_step = 1000;
@@ -80,7 +80,7 @@ for zeta = 0.01 : 0.01 : 1.0
         p_data = f_data .* dx_data;
         test_p_data = min(p_data);
     
-        if test_p_data >= - 1e-8
+        if test_p_data >= - 1e-6
             sol_test_FLAG = 'true';
         else
             sol_test_FLAG = 'false';
@@ -90,7 +90,7 @@ for zeta = 0.01 : 0.01 : 1.0
         table_index = table_index + 1;
     end
 end
-writetable(dat,'zeta_omega_fiveTerms_largerTolerance.csv')
+writetable(dat,'zeta_omega_fiveTerms_testdat.csv')
 
 
 
@@ -131,7 +131,7 @@ function [Cnt] = cosharm(m,omega,time_step,t)
     for index_term = 1:m
         for index_timepoint = 1:time_step
             time = t(index_timepoint);
-            Cnt(index_term,index_timepoint) = cos((2*index_term) * omega * time);
+            Cnt(index_term,index_timepoint) = cos((index_term) * omega * time);
         end
     end
 end
@@ -142,7 +142,7 @@ function [Snt] = sinharm(m,omega,time_step,t)
     for index_term = 1:m
         for index_timepoint = 1:time_step
             time = t(index_timepoint);
-            Snt(index_term,index_timepoint) = - (2 *index_term) * omega * sin((2 * index_term) * omega * time);
+            Snt(index_term,index_timepoint) = - (index_term) * omega * sin((index_term) * omega * time);
         end
     end
 end
@@ -153,7 +153,7 @@ function [CCnt] = ccosharm(m,omega,time_step,t)
     for index_term = 1:m
         for index_timepoint = 1:time_step
             time = t(index_timepoint);
-            CCnt(index_term,index_timepoint) = - (2 * index_term)^2 * omega^2 * cos((2*index_term) * omega * time);
+            CCnt(index_term,index_timepoint) = - (index_term)^2 * omega^2 * cos((index_term) * omega * time);
         end
     end
 end
