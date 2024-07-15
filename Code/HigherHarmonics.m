@@ -26,7 +26,7 @@ table_index = 1;
 for zeta= 0.01:0.01:1
     iterflag = 1;
     omega = omega_0;
-    while omega < 2 
+    while omega > 0 
         Period = 2 * pi / omega;
         time_step = 1000;
         t = linspace(0,2 * Period,time_step);
@@ -102,7 +102,7 @@ for zeta= 0.01:0.01:1
                       dat(table_index,:) = {zeta,omega/omega_0,sol.a,-fval,sol_test_FLAG};   
                       table_index = table_index + 1;
                       iterflag = iterflag + 1;
-                      omega = omega + 0.01;
+                      omega = omega - 0.01;
               else
                       sol_test_FLAG = 0;
                       break;
@@ -110,7 +110,7 @@ for zeta= 0.01:0.01:1
     end
 end
 %mkdir('C:\Users\m1352\Desktop\Master Thesis background\dataframe\dataset\',num2str(14))
-writetable(dat,'/Users/congxiaozhang/Documents/GitHub/Master-Thesis/Master Thesis background/dataframe/Sixterms_continuation.csv')
+writetable(dat,'/Users/congxiaozhang/Documents/GitHub/Master-Thesis/Master Thesis background/dataframe/Sixterms_continuation2.csv')
 %end
 
 %%Self-Function Part
