@@ -126,7 +126,8 @@ for zeta= 0.01:0.01:1
                             %omega = omega + 0.01;
                             break;
                         end
-                      end   
+                      end
+                      omega = omega - 0.01;
 
               end
     end
