@@ -26,12 +26,12 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="pt"
      inkscape:zoom="1.0433714"
-     inkscape:cx="334.97181"
-     inkscape:cy="264.04788"
+     inkscape:cx="334.9718"
+     inkscape:cy="264.52709"
      inkscape:window-width="1440"
-     inkscape:window-height="788"
-     inkscape:window-x="246"
-     inkscape:window-y="84"
+     inkscape:window-height="785"
+     inkscape:window-x="0"
+     inkscape:window-y="29"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg114" />
   <metadata
@@ -1074,6 +1074,20 @@
       </g>
     </g>
   </g>
+  <rect
+     style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.999997;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:2, 0.999997, 0.5, 0.999997;stroke-dashoffset:0;stroke-opacity:1"
+     id="rect11"
+     width="14.807044"
+     height="80.381088"
+     x="14.031175"
+     y="131.56294" />
+  <rect
+     style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.999997;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:2, 0.999997, 0.5, 0.999997;stroke-dashoffset:0;stroke-opacity:1"
+     id="rect10"
+     width="88.842262"
+     height="13.396849"
+     x="192.5"
+     y="329.75" />
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:6px;font-family:'.Hiragino Kaku Gothic Interface';-inkscape-font-specification:'.Hiragino Kaku Gothic Interface, Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;fill:#9f6fd4;fill-opacity:1;stroke:#a5adb9;stroke-width:0.999997;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
@@ -1170,9 +1184,9 @@
      transform="matrix(1,0,0,0.99458406,-1.2995792,199.81169)"><tspan
        x="429.35358"
        y="51.322151"
-       id="tspan3">Omega Ratio Ω/Ω<tspan
+       id="tspan8">Omega Ratio Ω/Ω<tspan
    style="baseline-shift:sub"
-   id="tspan2">0</tspan></tspan></text>
+   id="tspan1">0</tspan></tspan></text>
   <text
      xml:space="preserve"
      transform="matrix(0.75,0,0,0.75,22.84828,0.03515501)"
@@ -1180,7 +1194,7 @@
      style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:8px;font-family:'.Apple SD Gothic NeoI';-inkscape-font-specification:'.Apple SD Gothic NeoI, Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect14);fill:#6a788c;fill-opacity:1;stroke:#728ab2;stroke-width:1.33333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"><tspan
        x="408.01562"
        y="101.95312"
-       id="tspan4">Inelastic Load G</tspan></text>
+       id="tspan11">Inelastic Load G</tspan></text>
   <text
      xml:space="preserve"
      transform="matrix(0.75,0,0,0.75,52.331093,3.7392566)"
@@ -1188,7 +1202,7 @@
      style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:8px;font-family:'.Apple SD Gothic NeoI';-inkscape-font-specification:'.Apple SD Gothic NeoI, Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect13);fill:#6a788c;fill-opacity:1;stroke:#cdaa54;stroke-width:1.33333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"><tspan
        x="374.17188"
        y="64.347656"
-       id="tspan5">Elastic Load F</tspan></text>
+       id="tspan12">Elastic Load F</tspan></text>
   <rect
      style="fill:#6a788c;fill-opacity:1;stroke:#ffffff;stroke-width:0.999997;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
      id="rect12-6"
@@ -1221,7 +1235,7 @@
      style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:10.6667px;font-family:'American Typewriter';-inkscape-font-specification:'American Typewriter, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect15);shape-padding:2.82039;fill:#6a788c;fill-opacity:1;stroke:#3e68ad;stroke-width:1.33333;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"><tspan
        x="180.50391"
        y="115.93566"
-       id="tspan7">Simple Harmonic Work-loop</tspan></text>
+       id="tspan13">Simple Harmonic Work-loop</tspan></text>
   <defs
      id="defs114">
     <clipPath
