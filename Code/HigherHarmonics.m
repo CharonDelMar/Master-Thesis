@@ -123,8 +123,6 @@ for zeta= 0.01:0.01:1
                             sol_test_FLAG = 2;
                             dat(table_index,:) = {zeta,omega/omega_0,sol.a,-fval,sol_test_FLAG};   
                             table_index = table_index + 1;
-                            %omega = omega - 0.01;
-                            omega = omega + 0.01;
                             break;
                         end
                       end
