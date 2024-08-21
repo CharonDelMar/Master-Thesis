@@ -195,17 +195,6 @@ function [CCnt] = ccosharm(m,omega,time_step,t)
     end
 end
 
-function [CCnt] = ccosharm(m,omega,time_step,t)
-    CCnt = zeros(m,time_step);
-    
-    for index_term = 1:m
-        for index_timepoint = 1:time_step
-            time = t(index_timepoint);
-            CCnt(index_term,index_timepoint) = - (2 *index_term -1)^2 * omega^2 * cos((2 *index_term -1) * omega * time);
-        end
-    end
-end
-
 function samples = discrete_gaussian_sampling(m, num_samples, sigma, range)
     % m: Dimension of the space
     % num_samples: Number of sampling points
