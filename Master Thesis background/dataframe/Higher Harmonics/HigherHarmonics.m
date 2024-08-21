@@ -100,6 +100,9 @@ for zeta= 0.01:0.01:1
               a5 = sol.a(5);
               a6 = sol.a(6);
               p_val = evaluate(min_p,sol);
+              p_dat = evaluate(p,sol);
+              F_dat = evaluate(F,sol);
+              G_dat = evaluate(G,sol);
               
               %Export Data to EXCEL
               %Check out whether the algorithm gave us a nice solution
@@ -118,6 +121,10 @@ for zeta= 0.01:0.01:1
                         %show(prob);
                         [sol,fval,exitflag,output] = solve(prob,x0,'Options', options);
                         p_val = evaluate(min_p,sol);
+                        p_val = evaluate(min_p,sol);
+                        p_dat = evaluate(p,sol);
+                        F_dat = evaluate(F,sol);
+                        G_dat = evaluate(G,sol);
                         
                         %Export Data to EXCEL
                         if  abs(p_val) <= 1e-9
@@ -180,17 +187,6 @@ function [Snt] = sinharm(m,omega,time_step,t)
         for index_timepoint = 1:time_step
             time = t(index_timepoint);
             Snt(index_term,index_timepoint) = - (2 *index_term -1) * omega * sin((2 *index_term -1) * omega * time);
-        end
-    end
-end
-
-function [CCnt] = ccosharm(m,omega,time_step,t)
-    CCnt = zeros(m,time_step);
-    
-    for index_term = 1:m
-        for index_timepoint = 1:time_step
-            time = t(index_timepoint);
-            CCnt(index_term,index_timepoint) = - (2 *index_term -1)^2 * omega^2 * cos((2 *index_term -1) * omega * time);
         end
     end
 end
