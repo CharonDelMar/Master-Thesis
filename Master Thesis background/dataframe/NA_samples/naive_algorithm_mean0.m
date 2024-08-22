@@ -20,7 +20,7 @@ sigma = 1; % Standard deviation
 range = [-1, 1]; % Allowed range for sampling values
 
 samples = discrete_gaussian_sampling(m, num_samples, sigma, range);
-writematrix(samples,'C:\Users\m1352\Desktop\Master Thesis background\dataframe\dataset\a_sigma001.csv')
+writematrix(samples,'C:\Users\m1352\Desktop\Master Thesis background\dataframe\samples.csv')
 
 omega_0 = 1;
 table_index = 1;

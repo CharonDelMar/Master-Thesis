@@ -101,7 +101,6 @@ for zeta= 0.01:0.01:1
               %x dx ddx
     
               if  abs(p_val) <= 1e-9
-                      sol_test_FLAG = 1;
                                         
                       %dat(table_index,:) = {zeta,omega/omega_0,sol.a,{p_dat},{F_dat},{G_dat}};
                       dat(table_index,:) = {zeta,omega/omega_0,sol.a};
