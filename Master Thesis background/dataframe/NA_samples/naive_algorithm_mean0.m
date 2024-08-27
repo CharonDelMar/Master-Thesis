@@ -16,11 +16,11 @@ m = 3; % m terms Case
 
 %Gaussian_Sampling_initialization
 num_samples = 10; % Number of sampling points
-sigma = 1; % Standard deviation
+sigma = 0.5; % Standard deviation
 range = [-1, 1]; % Allowed range for sampling values
 
 samples = discrete_gaussian_sampling(m, num_samples, sigma, range);
-writematrix(samples,'C:\Users\m1352\Desktop\Master Thesis background\dataframe\samples.csv')
+writematrix(samples,'C:\Users\m1352\Desktop\Master Thesis background\dataframe\samples05.csv')
 
 omega_0 = 1;
 table_index = 1;
@@ -91,7 +91,7 @@ for zeta= 0.01:0.01:1
     end
 end
 %mkdir('C:\Users\m1352\Desktop\Master Thesis background\dataframe\dataset\',num2str(14))
-writetable(dat,'C:\Users\m1352\Desktop\Master Thesis background\dataframe\NA_sample_sqp.csv')
+writetable(dat,'C:\Users\m1352\Desktop\Master Thesis background\dataframe\NA_sample_sqp05.csv')
 
 for zeta= 0.01:0.01:1
     for omega = 0.01
@@ -158,7 +158,7 @@ for zeta= 0.01:0.01:1
     end
 end
 %mkdir('C:\Users\m1352\Desktop\Master Thesis background\dataframe\dataset\',num2str(14))
-writetable(dat,'C:\Users\m1352\Desktop\Master Thesis background\dataframe\NA_sample_activeset.csv')
+writetable(dat,'C:\Users\m1352\Desktop\Master Thesis background\dataframe\NA_sample_activeset05.csv')
 
 
 
