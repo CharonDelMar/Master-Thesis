@@ -8,12 +8,14 @@ clc;
 
 %for iter = 1:1:100
 %Create table to store results
-sz = [400 6];
-varTypes = ["double","double","cell","cell","cell","cell"];
-varNames = ["zeta","omega_ratio","solution","power","F","G"];
+sz = [400 4];
+varTypes = ["double","double","cell","double"];
+varNames = ["zeta","omega_ratio","solution","fval"];
 dat = table('Size',sz,'VariableTypes',varTypes,'VariableNames',varNames);
 
 %Initialization
+%data = readtable('C:\Users\m1352\Desktop\Master Thesis background\dataframe\numerical_continuation_benchmark.csv');
+
 m = 6; % m terms Case
 
 omega_0 = 1;
@@ -33,13 +35,10 @@ for zeta= 0.01:0.01:1
     iterflag = 1;
     omega = omega_0;
     %while omega > 0
-    while omega < 2 
+    while omega < 1.7 
         Period = 2 * pi / omega;
         time_step = 1000;
         t = linspace(0,Period,time_step);
-        
-        % Print
-        %fprintf(['zeta ' num2str(zeta) ' omega ' num2str(omega)])
         
         Cnt = cosharm(m,omega,time_step,t);
         Snt = sinharm(m,omega,time_step,t);
@@ -51,15 +50,16 @@ for zeta= 0.01:0.01:1
         a = optimvar('a',m); % m-by-1 variable
         
         %Convert the function into optimization expression
+         %[min_p,max_p,p,f,x,minx,maxx,F_minx,G_minx,F_maxx,G_maxx] = fcn2optimexpr(@power,zeta,omega_0,a,Cnt,Snt,CCnt,m,time_step);
          [min_p,max_p,p,f,x,minx,maxx,F,G] = fcn2optimexpr(@power,zeta,omega_0,a,Cnt,Snt,CCnt,m,time_step);
-         funminp= @(p)min(p);
-         funexpr = fcn2optimexpr(funminp,p,'OutputSize',[1,1]);
+         fun = @(p)min(p);
+         funexpr = fcn2optimexpr(fun,p,'OutputSize',[1,1]);
          funmaxp = @(p)max(p);
          funexprmaxp = fcn2optimexpr(funmaxp,p,'OutputSize',[1,1]);
-         funminx = @(x)min(x);
-         funexprminx = fcn2optimexpr(funminx,x,'OutputSize',[1,1]);
-         funmaxx = @(x)max(x);
-         funexprmaxx = fcn2optimexpr(funmaxx,x,'OutputSize',[1,1]);
+         funxmin = @(x)min(x);
+         funexprxmin = fcn2optimexpr(funxmin,x,'OutputSize',[1,1]);
+         funxmax = @(x)max(x);
+         funexprxmax = fcn2optimexpr(funxmax,x,'OutputSize',[1,1]);
         
           %Define Objective Functions
           prob = optimproblem;
@@ -103,18 +103,17 @@ for zeta= 0.01:0.01:1
               p_dat = evaluate(p,sol);
               F_dat = evaluate(F,sol);
               G_dat = evaluate(G,sol);
-              
+
               %Export Data to EXCEL
               %Check out whether the algorithm gave us a nice solution
               %x dx ddx
     
               if  abs(p_val) <= 1e-9
                       sol_test_FLAG = 1;
-                      dat(table_index,:) = {zeta,omega/omega_0,sol.a,{p_dat},{F_dat},{G_dat}};
+                      dat(table_index,:) = {zeta,omega/omega_0,sol.a,fval};
                       table_index = table_index + 1;
                       iterflag = iterflag + 1;
-                      %omega = omega - 0.01;
-                      omega = omega + 0.01;
+                      
               else
                       for iter = 1:1:10
                         x0.a = samples(iter,:);
@@ -128,19 +127,20 @@ for zeta= 0.01:0.01:1
                         
                         %Export Data to EXCEL
                         if  abs(p_val) <= 1e-9
-                            dat(table_index,:) = {zeta,omega/omega_0,sol.a,{p_dat},{F_dat},{G_dat}};   
+                            dat(table_index,:) = {zeta,omega/omega_0,sol.a,fval};   
                             table_index = table_index + 1;
                             break;
                         end
                       end
-                      %omega = omega - 0.01;
-                      omega = omega + 0.01;
-
+                      
               end
+              %omega = omega - 0.01;
+              omega = omega + 0.01;
+
     end
 end
 %mkdir('C:\Users\m1352\Desktop\Master Thesis background\dataframe\dataset\',num2str(14))
-writetable(dat,'/Users/congxiaozhang/Documents/GitHub/Master-Thesis/Master Thesis background/dataframe/Sixterms2.csv')
+writetable(dat,'/Users/congxiaozhang/Documents/GitHub/Master-Thesis/Master Thesis background/dataframe/Nonlinear_zone1.csv')
 %end
 
 %%Self-Function Part
@@ -155,12 +155,13 @@ for aindex = 1:m
     ddx = ddx + a(aindex) * CCnt(aindex,:);
 end
 
-f = ddx + 2 * zeta * omega_0 * dx + omega_0^2 * x;
+f = ddx + 2 * zeta * omega_0 * dx .* sqrt(dx .* dx) + omega_0^2 * x;
+p = f .* dx;
 p = f .* dx;
 min_p = min(p);
 max_p = max(p);
 
-G = ddx + 2 * zeta * omega_0 * dx;
+G = ddx + 2 * zeta * omega_0 * dx.* sqrt(dx .* dx);
 F = -omega_0^2 * x;
 
 %added Equality Condition

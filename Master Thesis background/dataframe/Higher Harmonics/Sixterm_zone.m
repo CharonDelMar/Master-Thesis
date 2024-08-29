@@ -8,9 +8,9 @@ clc;
 
 %for iter = 1:1:100
 %Create table to store results
-sz = [400 6];
-varTypes = ["double","double","cell","cell","cell","cell"];
-varNames = ["zeta","omega_ratio","solution","power","F","G"];
+sz = [400 4];
+varTypes = ["double","double","cell","double"];
+varNames = ["zeta","omega_ratio","solution","fval"];
 dat = table('Size',sz,'VariableTypes',varTypes,'VariableNames',varNames);
 
 %Initialization
@@ -32,8 +32,8 @@ samples  = readmatrix('/Users/congxiaozhang/Documents/GitHub/Master-Thesis/Maste
 for zeta= 0.01:0.01:1
     iterflag = 1;
     omega = omega_0;
-    %while omega > 0
-    while omega < 2 
+    while omega > 0
+    %while omega < 2 
         Period = 2 * pi / omega;
         time_step = 1000;
         t = linspace(0,Period,time_step);
@@ -110,11 +110,11 @@ for zeta= 0.01:0.01:1
     
               if  abs(p_val) <= 1e-9
                       sol_test_FLAG = 1;
-                      dat(table_index,:) = {zeta,omega/omega_0,sol.a,{p_dat},{F_dat},{G_dat}};
+                      dat(table_index,:) = {zeta,omega/omega_0,sol.a,fval};
                       table_index = table_index + 1;
                       iterflag = iterflag + 1;
-                      %omega = omega - 0.01;
-                      omega = omega + 0.01;
+                      omega = omega - 0.01;
+                      %omega = omega + 0.01;
               else
                       for iter = 1:1:10
                         x0.a = samples(iter,:);
@@ -128,19 +128,19 @@ for zeta= 0.01:0.01:1
                         
                         %Export Data to EXCEL
                         if  abs(p_val) <= 1e-9
-                            dat(table_index,:) = {zeta,omega/omega_0,sol.a,{p_dat},{F_dat},{G_dat}};   
+                            dat(table_index,:) = {zeta,omega/omega_0,sol.a,fval};   
                             table_index = table_index + 1;
                             break;
                         end
                       end
-                      %omega = omega - 0.01;
-                      omega = omega + 0.01;
+                      omega = omega - 0.01;
+                      %omega = omega + 0.01;
 
               end
     end
 end
 %mkdir('C:\Users\m1352\Desktop\Master Thesis background\dataframe\dataset\',num2str(14))
-writetable(dat,'/Users/congxiaozhang/Documents/GitHub/Master-Thesis/Master Thesis background/dataframe/Sixterms2.csv')
+writetable(dat,'/Users/congxiaozhang/Documents/GitHub/Master-Thesis/Master Thesis background/dataframe/Sixterms_zone1.csv')
 %end
 
 %%Self-Function Part
