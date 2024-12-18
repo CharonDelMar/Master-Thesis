@@ -1,0 +1,15 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Numerical methods for mapping band-type resonance in
+  insect flight
+message: 'Supervisor: Arion Pons; Examiner: Larisa Beilina'
+type: software
+authors:
+  - given-names: Congxiao
+    family-names: Zhang
+    email: m13522000502@gmail.com
+repository-code: 'https://github.com/CharonDelMar/Master-Thesis.git'
+date-released: '2024-12-18'
